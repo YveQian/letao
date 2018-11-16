@@ -104,3 +104,22 @@ $('[type="reset"]').click(function(){
   $('#form').data("bootstrapValidator").resetForm();
 
 });
+
+// $(function(){
+//   $('.btn-login').click(function(){
+//     var username=$('#username').value;
+//     var password=$('#password').value;;
+//     $.ajax({
+//       url:'/employee/employeeLogout',
+//       dataType:'json',
+//       data:{
+//         username:username,
+//         password:password
+//       },
+//       success:function(info){
+//           console.log(info); 
+          
+//       }
+//     })
+//   })
+// })
