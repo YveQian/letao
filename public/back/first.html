@@ -5,12 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="./css/login.css">
+  <!-- <link rel="stylesheet" href="./css/login.css"> -->
   <link rel="stylesheet" href="./css/common.css">
   <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="./lib/bootstrap-validator/css/bootstrapValidator.min.css">
   <link rel="stylesheet" href="./lib/nprogress/nprogress.css">
   <link rel="stylesheet" href="./css/index.css">
+  <!-- <link rel="stylesheet" href="./lib/"> -->
   <title>index</title>
 </head>
 
@@ -27,7 +28,7 @@
     <div class="nav">
       <ul>
         <li>
-          <a href="user.html" class="current">
+          <a href="user.html">
             <i class="glyphicon glyphicon-user"></i>
             <span>用户管理</span>
           </a>
@@ -38,7 +39,7 @@
             <span>分类管理</span>
           </a>
           <div class="child">
-            <a href="first.html">一级分类</a>
+            <a  class="current" href="first.html">一级分类</a>
             <a href="second.html">二级分类</a>
           </div>
         </li>
@@ -67,54 +68,78 @@
         <li>
           <a href="index.html">管理系统</a>
         </li>
-        <li>用户管理</li>
+        <li>分类管理</li>
+        <li>一级分类</li>
       </ol>
-      <!-- 用户管理 -->
-      <!-- 准备模板引擎 -->
+      <div class="lt_content">
+        <button class="btn btn-default" id="addBtn">添加分类</button>
+        <!-- 表格 -->
 
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>用户名</th>
-            <th>手机号</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <script type="text/template" id="userTmp">
-                {{each rows v i }}
+        <table class="table table-bordered  table-hover mt_20 text-center">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>一级分类名称</th>
 
-                <tr>
-                  <td>{{v.id}}</td>
-                  <td>{{v.username}}</td>
-                  <td>{{v.mobile}}</td>
-                  <td>{{v.isDelete===1?'正常':'已禁用'}}</td>
-                  <td data-id="{{ v.id }}">
-                    {{if v.isDelete === 0 }}
-                    <button class="btn btn-success">启用</button>
-                    {{else}}
-                    <button class="btn btn-danger">禁用</button>
-                  </td>
-                  {{/if}}
-                </tr>
+            </tr>
+          </thead>
 
-                {{/each}}
+          <!-- 准备模板 -->
+          <tbody>
+            <script type="text/template" id="firsTmp">
+            {{each rows v i}}
+              <tr>
+                <td>{{ i+1+ (page-1)*size }}</td>
+                <td>{{v.categoryName}}</td>
+              </tr>
+              {{/each}}
             </script>
-        </tbody>
-      </table>
-      <!-- 准备分页容器 -->
-      <div class="text-right">
-        <ul id="paginator"></ul>
-      </div>
+          </tbody>
 
+        </table>
+        <div class="text-right">
+          <!-- 准备分页容器 -->
+          <ul id="paginator"></ul>
+        </div>
+
+      </div>
 
 
     </div>
   </div>
-  <!-- 用户启用禁用模态框 -->
-  <div class="modal fade" tabindex="-1" id="userModal">
+  <!-- 添加的模态框 -->
+  <div class="modal fade" tabindex="-1" id="addModal">
+    <!-- 内部的模态框 -->
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <form id="form">
+          <!-- 头部 -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+            <h4 class="modal-title">添加分类</h4>
+          </div>
+          <!-- 中间 -->
+          <div class="modal-body">
+              <div class="form-group">
+                <input type="text" name="categoryName" class="form-control" placeholder="请输入一级分类">
+              </div>
+            </div>
+          <!-- 底部 -->
+          <!-- data-dismiss="modal" 可以用于关闭模态框 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">添加</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- 退出模态框 -->
+  <!-- 模态框大小: modal-lg 大型   默认中型    modal-sm 小型 -->
+  <!-- 外层的蒙层 -->
+  <div class="modal fade" tabindex="-1" id="logoutModal">
     <!-- 内部的模态框 -->
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -129,31 +154,35 @@
         <div class="modal-body">
           <p class="red">
             <i class="glyphicon glyphicon-info-sign"></i>
-            <span>你确定要执行此操作吗？</span>
+            <span>您确定要退出后台管理系统吗？</span>
           </p>
         </div>
         <!-- 底部 -->
         <!-- data-dismiss="modal" 可以用于关闭模态框 -->
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary" id="confirmBtn">确定</button>
+          <button type="button" class="btn btn-primary" id="logoutBtn">退出</button>
         </div>
       </div>
     </div>
   </div>
 
+
 </body>
 <script src="./lib/jquery/jquery.min.js"></script>
+<script src="./lib/jquery-fileupload/jquery.ui.widget.js"></script>
+<script src="./lib/jquery-fileupload/jquery.fileupload.js"></script>
 <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
 <script src="./lib/bootstrap-validator/js/bootstrapValidator.min.js"></script>
 <script src="./lib/nprogress/nprogress.js"></script>
 <script src="./lib/artTemplate/template-web.js"></script>
 <script src="./lib/bootstrap-paginator/bootstrap-paginator.min.js"></script>
+<!-- <script src="./js/login.js"></script> -->
 <script src="./js/common.js"></script>
-<!-- 判断用户是否登录 -->
-<script src="./js/isLogin.js"></script>
-<script src="./js/user.js"></script>
+<!-- 判断用户是否登入过 -->
 
+<script src="./js/first.js"></script>
+<script src="./js/isLogin.js"></script>
 <!-- <script src="./js/index.js"></script> -->
 <!-- <script src="./lib/echarts/echarts.min.js"></script> -->
 
