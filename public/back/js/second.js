@@ -36,9 +36,9 @@ $(function () {
     })
 
   }
-})
+
 //添加模态框
-$(function () {
+
 
   $('#addBtn').click(function () {
 
@@ -141,4 +141,25 @@ $(function () {
       }
     }
   })
+
+  $("#form").on('success.form.bv', function (e) {
+    e.preventDefault();
+    //使用ajax提交逻辑
+    $.ajax({
+      type:'post',
+      url:'/category/addSecondCategory',
+      dataType:'json',
+      data:$('#form').serialize(),
+      success:function(info){
+          if(info.success){
+            //隐藏模态框
+            $('#addModal').modal("hide");
+              // 重新渲染页面, 渲染第一页
+              currentPage = 1;
+              render();
+          }
+      }
+      
+    })
+});
 });
